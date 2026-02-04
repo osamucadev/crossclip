@@ -1,0 +1,12 @@
+{
+  "name": "crossclip",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "firebase/functions"
+  ],
+  "scripts": {
+    "fmt": "echo \"ok\""
+  }
+}

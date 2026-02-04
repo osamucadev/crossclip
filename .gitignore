@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+coverage
+.env
+.env.local
+.DS_Store
+
+# Expo
+.expo
+.expo-shared
+
+# Firebase
+.firebase
