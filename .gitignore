@@ -12,3 +12,4 @@ coverage
 
 # Firebase
 .firebase
+google-services.json
