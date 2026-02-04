@@ -1,7 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { useAppTheme } from "../src/ui/useAppTheme";
-import { ContextCard } from "../src/ui/ContextCard";
 
 export default function Home() {
   const { t } = useAppTheme();
@@ -10,28 +9,6 @@ export default function Home() {
     <View style={[styles.page, { backgroundColor: t.bg }]}>
       <View style={styles.container}>
         <Text style={[styles.h1, { color: t.text }]}>Crossclip</Text>
-
-        <Text style={[styles.sub, { color: t.textMuted }]}>
-          A shared clipboard between your phone and the web. Text only. Fast by
-          design.
-        </Text>
-
-        <View style={styles.cards}>
-          <ContextCard title="Send" meta="Phone → Web">
-            Copy something on your phone and push it to your web clipboard in
-            seconds.
-          </ContextCard>
-
-          <ContextCard title="Pull" meta="Web → Phone">
-            Save text on the web and instantly grab it on Android when you need
-            it.
-          </ContextCard>
-
-          <ContextCard title="Burro por design" meta="Backend stays dumb">
-            Storage is just strings. Any smart parsing happens on the client.
-          </ContextCard>
-        </View>
-
         <View style={styles.actions}>
           <Pressable
             onPress={() => router.push("/sign-in")}

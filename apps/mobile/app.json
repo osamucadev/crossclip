@@ -8,7 +8,18 @@
     "plugins": ["@react-native-google-signin/google-signin"],
     "android": {
       "package": "crossclip.samuelcaetite.dev",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "intentFilters": [
+        {
+          "action": "SEND",
+          "category": ["DEFAULT"],
+          "data": [
+            {
+              "mimeType": "text/*"
+            }
+          ]
+        }
+      ]
     }
   }
 }
