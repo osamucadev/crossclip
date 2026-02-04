@@ -5,8 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "platforms": ["android"],
+    "plugins": ["@react-native-google-signin/google-signin"],
     "android": {
-      "package": "dev.crossclip.app"
+      "package": "crossclip.samuelcaetite.dev",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
