@@ -1,17 +1,10 @@
-import {
-  View,
-  Text,
-  Pressable,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { YStack, XStack, Text, Button, Spinner } from "tamagui";
 import { router } from "expo-router";
 import { useState } from "react";
 import { signInWithGoogle } from "../src/lib/googleSignIn";
-import { useAppTheme } from "../src/ui/useAppTheme";
+import { ThemeToggle } from "../src/components/ThemeToggle";
 
 export default function SignIn() {
-  const { t } = useAppTheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,70 +22,65 @@ export default function SignIn() {
   }
 
   return (
-    <View style={[styles.page, { backgroundColor: t.bg }]}>
-      <View style={styles.container}>
-        <Text style={[styles.title, { color: t.text }]}>Sign in</Text>
+    <YStack flex={1} backgroundColor="$background">
+      <YStack paddingTop="$16" paddingHorizontal="$5" paddingBottom="$4">
+        {/* Header com ThemeToggle centralizado */}
+        <XStack justifyContent="center" marginBottom="$6">
+          <ThemeToggle />
+        </XStack>
 
-        <Text style={[styles.sub, { color: t.textMuted }]}>
-          Your clipboard, synced across devices. Text only.
+        <Text
+          fontSize={32}
+          fontWeight="700"
+          color="$color"
+          fontFamily="DMSans_700Bold"
+          letterSpacing={-0.8}
+          marginBottom="$3"
+        >
+          Olá 🤗
         </Text>
 
-        <Pressable
+        <Text
+          fontSize={15}
+          lineHeight={24}
+          color="$muted"
+          fontFamily="DMSans_400Regular"
+          marginBottom="$8"
+        >
+          Seus textos, sincronizados entre dispositivos.{"\n"}
+          Simples e rápido.
+        </Text>
+
+        <Button
+          size="$5"
+          backgroundColor="$primary"
+          borderRadius="$4"
           onPress={handleSignIn}
           disabled={loading}
-          style={[
-            styles.button,
-            {
-              backgroundColor: t.accent,
-              opacity: loading ? 0.6 : 1,
-            },
-          ]}
+          opacity={loading ? 0.6 : 1}
+          pressStyle={{ scale: 0.98 }}
+          marginBottom="$4"
         >
           {loading ? (
-            <ActivityIndicator color="white" />
+            <Spinner color="white" />
           ) : (
-            <Text style={styles.buttonText}>Continue with Google</Text>
+            <Text color="white" fontWeight="600" fontFamily="DMSans_500Medium">
+              Continuar com Google
+            </Text>
           )}
-        </Pressable>
+        </Button>
 
         {error && (
-          <Text style={[styles.error, { color: t.textSoft }]}>{error}</Text>
+          <Text
+            fontSize={14}
+            color="$muted"
+            fontFamily="DMSans_400Regular"
+            textAlign="center"
+          >
+            {error}
+          </Text>
         )}
-      </View>
-    </View>
+      </YStack>
+    </YStack>
   );
 }
-
-const styles = StyleSheet.create({
-  page: { flex: 1 },
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 80,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "800",
-    letterSpacing: -1,
-  },
-  sub: {
-    marginTop: 12,
-    fontSize: 14.5,
-    lineHeight: 22,
-  },
-  button: {
-    marginTop: 28,
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    letterSpacing: -0.2,
-  },
-  error: {
-    marginTop: 16,
-    fontSize: 13,
-  },
-});
