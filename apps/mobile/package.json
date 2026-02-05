@@ -10,12 +10,19 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@expo-google-fonts/dm-sans": "^0.4.2",
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-google-signin/google-signin": "^16.1.1",
+    "@react-native-menu/menu": "^2.0.0",
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
+    "@tamagui/animations-react-native": "^2.0.0-rc.2",
+    "@tamagui/config": "^2.0.0-rc.2",
+    "@tamagui/core": "^2.0.0-rc.2",
+    "@tamagui/lucide-icons": "^2.0.0-rc.2",
+    "burnt": "^0.12.2",
     "expo": "~54.0.33",
     "expo-application": "~7.0.8",
     "expo-clipboard": "~8.0.8",
@@ -40,7 +47,9 @@
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-web": "~0.21.0",
-    "react-native-worklets": "0.5.1"
+    "react-native-worklets": "0.5.1",
+    "tamagui": "^2.0.0-rc.2",
+    "zeego": "^3.0.6"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",

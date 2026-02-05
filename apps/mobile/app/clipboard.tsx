@@ -1,19 +1,14 @@
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  FlatList,
-  ToastAndroid,
-} from "react-native";
+import { YStack, XStack, Text, Button,  Card } from "tamagui";
 import * as Clipboard from "expo-clipboard";
 import { useEffect, useState } from "react";
 import { addClip, deleteClip, subscribeToClips } from "../src/lib/firestore";
-import { useAppTheme } from "../src/ui/useAppTheme";
 import { signOut } from "firebase/auth";
 import { auth } from "../src/lib/firebase";
 import { router } from "expo-router";
 import { trackInteraction } from "../src/lib/reviewPrompt";
+import { ThemeToggle } from "../src/components/ThemeToggle";
+import { LogOut } from "@tamagui/lucide-icons";
+import { ToastAndroid, FlatList } from "react-native";
 
 type Clip = {
   id: string;
@@ -21,7 +16,6 @@ type Clip = {
 };
 
 export default function ClipboardScreen() {
-  const { t } = useAppTheme();
   const [clips, setClips] = useState<Clip[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +26,8 @@ export default function ClipboardScreen() {
       if (!text.trim()) return;
 
       await addClip(text);
-      await trackInteraction(); // Track interaction
+      await trackInteraction();
+      ToastAndroid.show("Texto adicionado", ToastAndroid.SHORT);
     } finally {
       setLoading(false);
     }
@@ -40,7 +35,7 @@ export default function ClipboardScreen() {
 
   async function handleCopy(text: string) {
     await Clipboard.setStringAsync(text);
-    await trackInteraction(); // Track interaction
+    await trackInteraction();
     ToastAndroid.show("Copiado", ToastAndroid.SHORT);
   }
 
@@ -49,7 +44,7 @@ export default function ClipboardScreen() {
     try {
       await deleteClip(id);
       setClips((prev) => prev.filter((c) => c.id !== id));
-      await trackInteraction(); // Track interaction
+      await trackInteraction();
       ToastAndroid.show("Excluído", ToastAndroid.SHORT);
     } finally {
       setLoading(false);
@@ -63,161 +58,134 @@ export default function ClipboardScreen() {
 
   useEffect(() => {
     const unsubscribe = subscribeToClips(setClips);
-
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, []);
 
   return (
-    <View style={[styles.page, { backgroundColor: t.bg }]}>
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <Text style={[styles.title, { color: t.text }]}>Clipboard</Text>
-          <Pressable
-            onPress={handleLogout}
-            style={[styles.logoutBtn, { borderColor: t.border }]}
-          >
-            <Text style={[styles.logoutText, { color: t.textMuted }]}>
-              Sair
-            </Text>
-          </Pressable>
-        </View>
-
-        <Pressable
-          onPress={handlePushClipboard}
-          style={[
-            styles.btn,
-            { backgroundColor: t.accent, opacity: loading ? 0.6 : 1 },
-          ]}
+    <YStack flex={1} backgroundColor="$background">
+      {/* Header */}
+      <YStack paddingTop="$16" paddingHorizontal="$5" paddingBottom="$4">
+        <XStack
+          alignItems="center"
+          justifyContent="space-between"
+          marginBottom="$4"
         >
-          <Text style={styles.btnText}>Push clipboard</Text>
-        </Pressable>
-      </View>
+          <Text
+            fontSize={28}
+            fontWeight="700"
+            color="$color"
+            fontFamily="DMSans_700Bold"
+            letterSpacing={-0.5}
+          >
+            Seus textos
+          </Text>
 
+          <XStack gap="$3" alignItems="center">
+            <ThemeToggle />
+            <Button
+              size="$3"
+              circular
+              chromeless
+              icon={LogOut}
+              onPress={handleLogout}
+              pressStyle={{ opacity: 0.7 }}
+            />
+          </XStack>
+        </XStack>
+
+        <Button
+          size="$4"
+          backgroundColor="$primary"
+          borderRadius="$4"
+          onPress={handlePushClipboard}
+          disabled={loading}
+          opacity={loading ? 0.6 : 1}
+          pressStyle={{ scale: 0.98 }}
+        >
+          <Text color="white" fontWeight="600" fontFamily="DMSans_500Medium">
+            Adicionar do clipboard
+          </Text>
+        </Button>
+      </YStack>
+
+      {/* Clips List */}
       <FlatList
         data={clips}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={{ padding: 20, paddingTop: 8 }}
         renderItem={({ item }) => (
-          <View
-            style={[
-              styles.card,
-              {
-                backgroundColor: t.surface,
-                borderColor: t.border,
-              },
-            ]}
+          <Card
+            backgroundColor="$surface"
+            borderWidth={1}
+            borderColor="$borderColor"
+            borderRadius="$5"
+            padding="$4"
+            marginBottom="$3"
+            pressStyle={{ scale: 0.98 }}
           >
             <Text
-              style={[styles.clipText, { color: t.textMuted }]}
+              fontSize={15}
+              lineHeight={22}
+              color="$color"
+              fontFamily="DMSans_400Regular"
               numberOfLines={6}
             >
               {item.content}
             </Text>
 
-            <View style={styles.actions}>
-              <Pressable
+            <XStack gap="$3" marginTop="$3">
+              <Button
+                flex={1}
+                size="$3"
+                borderWidth={1}
+                borderColor="$borderColor"
+                backgroundColor="transparent"
+                borderRadius="$3"
                 onPress={() => handleDelete(item.id)}
-                style={[
-                  styles.actionBtn,
-                  styles.deleteBtn,
-                  { borderColor: t.border },
-                ]}
-                android_ripple={{ borderless: false }}
+                pressStyle={{ backgroundColor: "$backgroundHover" }}
               >
-                <Text style={[styles.actionText, { color: t.text }]}>
+                <Text
+                  color="$color"
+                  fontWeight="600"
+                  fontFamily="DMSans_500Medium"
+                >
                   Excluir
                 </Text>
-              </Pressable>
+              </Button>
 
-              <Pressable
+              <Button
+                flex={1}
+                size="$3"
+                backgroundColor="$primary"
+                borderRadius="$3"
                 onPress={() => handleCopy(item.content)}
-                style={[styles.actionBtn, { backgroundColor: t.accent }]}
-                android_ripple={{ borderless: false }}
+                pressStyle={{ backgroundColor: "$primaryHover" }}
               >
-                <Text style={styles.actionTextPrimary}>Copiar</Text>
-              </Pressable>
-            </View>
-          </View>
+                <Text
+                  color="white"
+                  fontWeight="600"
+                  fontFamily="DMSans_500Medium"
+                >
+                  Copiar
+                </Text>
+              </Button>
+            </XStack>
+          </Card>
         )}
+        ListEmptyComponent={
+          <YStack alignItems="center" paddingTop="$10">
+            <Text
+              fontSize={16}
+              color="$muted"
+              fontFamily="DMSans_400Regular"
+              textAlign="center"
+            >
+              Nenhum texto salvo ainda.{"\n"}
+              Adicione do seu clipboard!
+            </Text>
+          </YStack>
+        }
       />
-    </View>
+    </YStack>
   );
 }
-
-const styles = StyleSheet.create({
-  page: { flex: 1 },
-  header: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-  },
-  headerTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "800",
-    letterSpacing: -1,
-  },
-  logoutBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-  logoutText: {
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  btn: {
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  btnText: {
-    color: "white",
-    fontWeight: "700",
-  },
-  list: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  card: {
-    padding: 14,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 12,
-  },
-  clipText: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  actions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 10,
-    marginTop: 12,
-  },
-  actionBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  deleteBtn: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-  },
-  actionText: {
-    fontWeight: "700",
-  },
-  actionTextPrimary: {
-    color: "white",
-    fontWeight: "800",
-  },
-});

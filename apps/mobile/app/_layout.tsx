@@ -4,10 +4,21 @@ import { registerClipboardSuggestionListener } from "../src/lib/clipboardSuggest
 import "react-native-reanimated";
 import { useEffect } from "react";
 import { AuthProvider } from "../src/contexts/AuthContext";
+import { ThemeProvider, useTheme } from "../src/contexts/ThemeContext";
 import { checkAppVersion, openPlayStore } from "../src/lib/versionControl";
 import { Alert } from "react-native";
+import { TamaguiProvider } from "tamagui";
+import config from "../tamagui.config";
+import {
+  useFonts,
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_700Bold,
+} from "@expo-google-fonts/dm-sans";
 
 function RootNavigator() {
+  const { theme } = useTheme();
+
   useEffect(() => {
     const unsubClipboard = registerClipboardSuggestionListener({
       onSaved: () => router.replace("/clipboard"),
@@ -21,7 +32,6 @@ function RootNavigator() {
       const status = await checkAppVersion();
 
       if (status.mustUpdate && !status.canStillUse) {
-        // Force update - block app usage
         Alert.alert(
           "Atualização obrigatória",
           "Você precisa atualizar o app para continuar usando.",
@@ -34,7 +44,6 @@ function RootNavigator() {
           { cancelable: false },
         );
       } else if (status.mustUpdate && status.canStillUse) {
-        // Warn but allow usage
         Alert.alert(
           "Nova versão disponível",
           `Atualize em breve. Você ainda pode usar o app ${status.opensLeft} vezes.`,
@@ -55,19 +64,38 @@ function RootNavigator() {
         <Stack.Screen name="index" />
         <Stack.Screen name="sign-in" />
         <Stack.Screen name="clipboard" />
-        {/* <Stack.Screen name="item/[id]" /> */}
-        {/* <Stack.Screen name="settings" /> */}
-        {/* <Stack.Screen name="modal" options={{ presentation: "modal" }} /> */}
       </Stack>
-      <StatusBar style="dark" />
+      <StatusBar style={theme === "dark" ? "light" : "dark"} />
     </>
   );
 }
 
-export default function RootLayout() {
+function AppContent() {
+  const { theme } = useTheme();
+
   return (
-    <AuthProvider>
-      <RootNavigator />
-    </AuthProvider>
+    <TamaguiProvider config={config} defaultTheme={theme} key={theme}>
+      <AuthProvider>
+        <RootNavigator />
+      </AuthProvider>
+    </TamaguiProvider>
+  );
+}
+
+export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

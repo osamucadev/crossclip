@@ -4,15 +4,22 @@
     "slug": "crossclip",
     "version": "1.0.0",
     "orientation": "portrait",
-    "platforms": ["android"],
-    "plugins": ["@react-native-google-signin/google-signin"],
+    "platforms": [
+      "android"
+    ],
+    "plugins": [
+      "@react-native-google-signin/google-signin",
+      "expo-font"
+    ],
     "android": {
       "package": "crossclip2.samuelcaetite.dev",
       "googleServicesFile": "./google-services.json",
       "intentFilters": [
         {
           "action": "SEND",
-          "category": ["DEFAULT"],
+          "category": [
+            "DEFAULT"
+          ],
           "data": [
             {
               "mimeType": "text/*"
