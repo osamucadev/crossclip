@@ -1,8 +1,19 @@
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { registerClipboardSuggestionListener } from "../src/lib/clipboardSuggestion";
 import "react-native-reanimated";
+import { useEffect } from "react";
+import { AuthProvider } from "../src/contexts/AuthContext";
 
-export default function RootLayout() {
+function RootNavigator() {
+  useEffect(() => {
+    const unsubClipboard = registerClipboardSuggestionListener({
+      onSaved: () => router.replace("/clipboard"),
+    });
+
+    return unsubClipboard;
+  }, []);
+
   return (
     <>
       <Stack screenOptions={{ headerShown: false, animation: "fade" }}>
@@ -15,5 +26,13 @@ export default function RootLayout() {
       </Stack>
       <StatusBar style="dark" />
     </>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RootNavigator />
+    </AuthProvider>
   );
 }

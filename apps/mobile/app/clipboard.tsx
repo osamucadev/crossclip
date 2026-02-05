@@ -10,6 +10,9 @@ import * as Clipboard from "expo-clipboard";
 import { useEffect, useState } from "react";
 import { addClip, deleteClip, subscribeToClips } from "../src/lib/firestore";
 import { useAppTheme } from "../src/ui/useAppTheme";
+import { signOut } from "firebase/auth";
+import { auth } from "../src/lib/firebase";
+import { router } from "expo-router";
 
 type Clip = {
   id: string;
@@ -49,6 +52,11 @@ export default function ClipboardScreen() {
     }
   }
 
+  async function handleLogout() {
+    await signOut(auth);
+    router.replace("/sign-in");
+  }
+
   useEffect(() => {
     const unsubscribe = subscribeToClips(setClips);
 
@@ -60,7 +68,17 @@ export default function ClipboardScreen() {
   return (
     <View style={[styles.page, { backgroundColor: t.bg }]}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: t.text }]}>Clipboard</Text>
+        <View style={styles.headerTop}>
+          <Text style={[styles.title, { color: t.text }]}>Clipboard</Text>
+          <Pressable
+            onPress={handleLogout}
+            style={[styles.logoutBtn, { borderColor: t.border }]}
+          >
+            <Text style={[styles.logoutText, { color: t.textMuted }]}>
+              Sair
+            </Text>
+          </Pressable>
+        </View>
 
         <Pressable
           onPress={handlePushClipboard}
@@ -131,13 +149,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 16,
   },
+  headerTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
   title: {
     fontSize: 26,
     fontWeight: "800",
     letterSpacing: -1,
   },
+  logoutBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  logoutText: {
+    fontSize: 14,
+    fontWeight: "600",
+  },
   btn: {
-    marginTop: 16,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",

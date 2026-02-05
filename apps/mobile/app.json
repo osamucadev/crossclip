@@ -7,7 +7,7 @@
     "platforms": ["android"],
     "plugins": ["@react-native-google-signin/google-signin"],
     "android": {
-      "package": "crossclip.samuelcaetite.dev",
+      "package": "crossclip2.samuelcaetite.dev",
       "googleServicesFile": "./google-services.json",
       "intentFilters": [
         {
