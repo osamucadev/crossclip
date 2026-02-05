@@ -13,6 +13,7 @@ import { useAppTheme } from "../src/ui/useAppTheme";
 import { signOut } from "firebase/auth";
 import { auth } from "../src/lib/firebase";
 import { router } from "expo-router";
+import { trackInteraction } from "../src/lib/reviewPrompt";
 
 type Clip = {
   id: string;
@@ -31,6 +32,7 @@ export default function ClipboardScreen() {
       if (!text.trim()) return;
 
       await addClip(text);
+      await trackInteraction(); // Track interaction
     } finally {
       setLoading(false);
     }
@@ -38,6 +40,7 @@ export default function ClipboardScreen() {
 
   async function handleCopy(text: string) {
     await Clipboard.setStringAsync(text);
+    await trackInteraction(); // Track interaction
     ToastAndroid.show("Copiado", ToastAndroid.SHORT);
   }
 
@@ -46,6 +49,7 @@ export default function ClipboardScreen() {
     try {
       await deleteClip(id);
       setClips((prev) => prev.filter((c) => c.id !== id));
+      await trackInteraction(); // Track interaction
       ToastAndroid.show("Excluído", ToastAndroid.SHORT);
     } finally {
       setLoading(false);

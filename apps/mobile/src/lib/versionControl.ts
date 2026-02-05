@@ -9,13 +9,13 @@ const MAX_OPENS = 7;
 
 export async function checkAppVersion() {
   // Skip version check in development
-//   if (__DEV__) {
-//     return {
-//       mustUpdate: false,
-//       canStillUse: true,
-//       opensLeft: MAX_OPENS,
-//     };
-//   }
+  //   if (__DEV__) {
+  //     return {
+  //       mustUpdate: false,
+  //       canStillUse: true,
+  //       opensLeft: MAX_OPENS,
+  //     };
+  //   }
 
   try {
     // Fetch minimum required version from Firestore
