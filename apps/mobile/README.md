@@ -1,40 +1,211 @@
-# Welcome to your Expo app 👋
+# Crossclip 📋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<div align="center">
 
-## Get started
+![React Native](https://img.shields.io/badge/React%20Native-0.76-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Expo](https://img.shields.io/badge/Expo-52.0-000020?style=for-the-badge&logo=expo&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-12.8-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Tamagui](https://img.shields.io/badge/Tamagui-2.0-FF4785?style=for-the-badge)
 
-1. Install dependencies
+**Sincronize seus textos entre dispositivos de forma simples e rápida**
 
-   ```bash
-   npm install
-   ```
+[Screenshots](#-screenshots) • [Features](#-features) • [Tecnologias](#-tecnologias) • [Instalação](SETUP.md) • [Guia de Estudos](GUIDE.md)
 
-2. Start the app
+</div>
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 📱 Sobre o Projeto
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Crossclip é um aplicativo mobile para Android que permite sincronizar textos copiados entre diferentes dispositivos através da nuvem. Simples, rápido e eficiente - sem complicação.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### ✨ Features
 
-## Learn more
+- 🔐 **Autenticação Google** - Login seguro com Firebase Auth
+- ☁️ **Sincronização em Tempo Real** - Firestore com listeners para updates instantâneos
+- 📋 **Gestão de Clipboard** - Adicione, copie e delete textos facilmente
+- 🌓 **Tema Claro/Escuro** - Interface adaptável com persistência de preferência
+- 🔄 **Controle de Versão Remoto** - Sistema de update forçado via Firestore
+- ⭐ **Review Prompt** - Solicitação inteligente de avaliação na Play Store
+- 💾 **Persistência de Sessão** - Login automático com AsyncStorage
+- 🎨 **Design Humanizado** - Interface clean com fonte DM Sans e cores aconchegantes
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🖼️ Screenshots
 
-## Join the community
+<div align="center">
 
-Join our community of developers creating universal apps.
+### Tela de Login
+![Tela de Login](docs/screenshots/signin.png)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Lista de Textos
+![Lista de Textos](docs/screenshots/clipboard-light.png)
+
+### Tema Escuro
+![Tema Escuro](docs/screenshots/clipboard-dark.png)
+
+</div>
+
+---
+
+## 🛠️ Tecnologias
+
+### Core
+- **React Native** - Framework mobile
+- **TypeScript** - Tipagem estática
+- **Expo** - Toolchain e SDK
+- **Expo Router** - Navegação file-based
+
+### UI/UX
+- **Tamagui** - Sistema de design e componentes
+- **DM Sans** - Tipografia humanizada
+- **Lucide Icons** - Ícones minimalistas
+
+### Backend & Auth
+- **Firebase Auth** - Autenticação com Google OAuth
+- **Firestore** - Banco de dados NoSQL em tempo real
+- **AsyncStorage** - Persistência local
+
+### Funcionalidades
+- **Expo Clipboard** - Acesso ao clipboard do sistema
+- **Expo Store Review** - Solicitação de avaliação
+- **Expo Application** - Informações do app
+
+---
+
+## 🚀 Como Usar
+
+### Pré-requisitos
+- Node.js 18+
+- Android Studio (para emulador ou build)
+- Conta Google (Firebase)
+
+### Instalação Rápida
+```bash
+# Clone o repositório
+git clone https://github.com/osamucadev/crossclip.git
+
+# Entre no diretório mobile
+cd crossclip/apps/mobile
+
+# Instale as dependências
+npm install
+
+# Configure o Firebase (ver SETUP.md)
+# Adicione google-services.json e configure .env
+
+# Rode o app
+npm run android
+```
+
+📖 **Para instruções detalhadas**, consulte o [SETUP.md](SETUP.md)
+
+---
+
+## 📂 Estrutura do Projeto
+```
+apps/mobile/
+├── app/                      # Rotas (Expo Router)
+│   ├── _layout.tsx           # Layout raiz com providers
+│   ├── index.tsx             # Redirect baseado em auth
+│   ├── sign-in.tsx           # Tela de login
+│   └── clipboard.tsx         # Lista de textos
+├── src/
+│   ├── components/           # Componentes reutilizáveis
+│   │   └── ThemeToggle.tsx
+│   ├── contexts/             # Contextos React
+│   │   ├── AuthContext.tsx   # Estado de autenticação
+│   │   └── ThemeContext.tsx  # Tema light/dark
+│   ├── lib/                  # Integrações externas
+│   │   ├── firebase.ts       # Config Firebase
+│   │   ├── firestore.ts      # CRUD Firestore
+│   │   ├── googleSignIn.ts   # OAuth Google
+│   │   ├── versionControl.ts # Update forçado
+│   │   └── reviewPrompt.ts   # Review tracking
+│   └── ui/
+│       └── useAppTheme.ts    # (legado)
+├── tamagui.config.ts         # Configuração Tamagui
+└── google-services.json      # Credenciais Firebase
+```
+
+---
+
+## 🎯 Funcionalidades Principais
+
+### Autenticação
+- Login com Google (Firebase Auth)
+- Persistência de sessão com AsyncStorage
+- Redirect automático baseado em estado de auth
+
+### Sincronização
+- CRUD de textos no Firestore
+- Listeners em tempo real (subscribeToClips)
+- Isolamento por usuário (userId)
+
+### Controle de Versão
+- Versão mínima configurável no Firestore (`config/app_version`)
+- 7 aberturas antes de forçar update
+- Desabilitado em desenvolvimento
+
+### Review Inteligente
+- Tracking de interações (push, copy, delete)
+- Prompt após 10 interações
+- Uma solicitação por instalação
+
+---
+
+## 🔒 Segurança
+
+- Autenticação via Google OAuth 2.0
+- Regras de segurança Firestore (isolamento por userId)
+- Tokens persistidos localmente com AsyncStorage
+- Variáveis de ambiente para credenciais
+
+---
+
+## 🐛 Troubleshooting
+
+Problemas comuns e soluções estão documentados no [SETUP.md](SETUP.md#-troubleshooting).
+
+---
+
+## 📚 Aprendizado
+
+Quer entender como o app funciona por dentro? Consulte o [GUIDE.md](GUIDE.md) para um plano de estudos completo sobre:
+- React Native & Expo
+- Firebase (Auth + Firestore)
+- TypeScript
+- State Management
+- E muito mais!
+
+---
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Sinta-se livre para abrir issues ou pull requests.
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 👨‍💻 Autor
+
+**Samuel Caetite**
+
+- GitHub: [@osamucadev](https://github.com/osamucadev)
+- LinkedIn: [Samuel Caetite](https://linkedin.com/in/samuelcaetite)
+- Portfolio: [samuelcaetite.dev](samuelcaetite.dev)
+
+---
+
+<div align="center">
+
+**Feito com 💜 por Samuel Caetite**
+
+</div>
